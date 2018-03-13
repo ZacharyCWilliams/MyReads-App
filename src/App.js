@@ -31,7 +31,6 @@ class BooksApp extends React.Component {
 	let wantToReadShelf = wantToRead.filter((book) => {return book.shelf === 'wantToRead'})
 	console.log('Want To Read Shelf: ', wantToReadShelf)
 	
-	/* The function I am trying to use to update book shelfs in app*/
 	let updateBookShelf = (book, shelf) => { BooksAPI.update(book.id, shelf).then((books) => BooksAPI.getAll()).then((books) => {return this.setState({ books })}) }
 	console.log(this.state.books)
 	    
