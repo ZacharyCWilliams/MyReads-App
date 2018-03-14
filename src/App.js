@@ -11,16 +11,15 @@ class BooksApp extends React.Component {
     }
 	
   componentDidMount(){
-      BooksAPI.getAll().then((books) => {
+    BooksAPI.getAll().then((books) => {
 	this.setState({ books });
 	});
     }
+
+    render() { 
       
-    render() {
-      
-    	let currentReads = this.state.books
-      	console.log('this.state.books: ', this.state.books)
-    	let currentlyReadingShelf = currentReads.filter((book) => {return book.shelf === 'currentlyReading'})
+    let currentReads = this.state.books
+    let currentlyReadingShelf = currentReads.filter((book) => {return book.shelf === 'currentlyReading'})
 	console.log('Currently Reading Shelf: ', currentlyReadingShelf)
 
 	let readBooks = this.state.books
@@ -31,13 +30,15 @@ class BooksApp extends React.Component {
 	let wantToReadShelf = wantToRead.filter((book) => {return book.shelf === 'wantToRead'})
 	console.log('Want To Read Shelf: ', wantToReadShelf)
 	
-	let updateBookShelf = (book, shelf) => { BooksAPI.update(book.id, shelf).then((books) => BooksAPI.getAll()).then((books) => {return this.setState({ books })}) }
+	let updateBookShelf = (book, shelf) => { BooksAPI.update(book, shelf).then((book) => BooksAPI.getAll()).then((books) => {this.setState({ books })}) }
 	console.log(this.state.books)
 	    
 	/* Trying to populate this.state.books so that I can test updateBookShelf function*/
 	BooksAPI.search('Negotiate', 20).then((books) => {console.log(books)})
-	BooksAPI.update("RmdqCgAAQBAJ", "read")
-	
+	BooksAPI.update("bQCmCgAAQBAJ", "read").then((books) => this.setState({books}))
+	console.log(this.state.books)
+
+
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -49,7 +50,6 @@ class BooksApp extends React.Component {
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
                   You can find these search terms here:
                   https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
