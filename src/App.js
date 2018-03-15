@@ -5,19 +5,29 @@ import Shelf from './Shelf'
 
 
 class BooksApp extends React.Component {
-    state = {
+
+  state = {
       showSearchPage: false,
       books: []
     }
-	
+
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
-	this.setState({ books });
-	});
+	     this.setState({ books });
+	    });
     }
 
-    render() { 
-      
+  componentDidUpdate() {
+      let newListOfBooks = BooksAPI.update(this, event.target.value).then(BooksAPI.getAll())
+      this.setState({books: newListOfBooks})
+      console.log(this);
+      console.log(event.target.value);
+      console.log(this.state.books);
+  }
+
+
+    render() {
+
     let currentReads = this.state.books
     let currentlyReadingShelf = currentReads.filter((book) => {return book.shelf === 'currentlyReading'})
 	console.log('Currently Reading Shelf: ', currentlyReadingShelf)
@@ -28,15 +38,10 @@ class BooksApp extends React.Component {
 
 	let wantToRead = this.state.books
 	let wantToReadShelf = wantToRead.filter((book) => {return book.shelf === 'wantToRead'})
-	console.log('Want To Read Shelf: ', wantToReadShelf)
-	
-	let updateBookShelf = (book, shelf) => { BooksAPI.update(book, shelf).then((book) => BooksAPI.getAll()).then((books) => {this.setState({ books })}) }
-	console.log(this.state.books)
-	    
-	/* Trying to populate this.state.books so that I can test updateBookShelf function*/
-	BooksAPI.search('Negotiate', 20).then((books) => {console.log(books)})
-	BooksAPI.update("bQCmCgAAQBAJ", "read").then((books) => this.setState({books}))
-	console.log(this.state.books)
+	console.log('Want To Read Shelf: ', wantToReadShelf);
+
+
+
 
 
     return (
@@ -71,9 +76,9 @@ class BooksApp extends React.Component {
             <div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>
-		<Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={updateBookShelf.bind(this)} />
-		<Shelf shelfName='Want To Read' currentShelf={readBookShelf} updateShelf={updateBookShelf.bind(this)} />
-		<Shelf shelfName='Read' currentShelf={wantToReadShelf} updateShelf={updateBookShelf.bind(this)} />
+		<Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={componentDidUpdate.bind(this)} />
+		<Shelf shelfName='Want To Read' currentShelf={readBookShelf} updateShelf={componentDidUpdate.bind(this)} />
+		<Shelf shelfName='Read' currentShelf={wantToReadShelf} updateShelf={componentDidUpdate.bind(this)} />
           </div>
         )}
       </div>
