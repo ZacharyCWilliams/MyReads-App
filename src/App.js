@@ -17,27 +17,29 @@ class BooksApp extends React.Component {
 	    });
     }
 
-  componentDidUpdate() {
+  componentDidUpdate(event) {
+      console.log('beginning of component: ', event)
       let newListOfBooks = BooksAPI.update(this, event.target.value).then(BooksAPI.getAll())
-      this.setState({books: newListOfBooks})
-      console.log(this);
-      console.log(event.target.value);
-      console.log(this.state.books);
+      newListOfBooks.then((books) => {this.setState({books: newListOfBooks})}).then(this.forceUpdate())
+      console.log('this: ', this);
+      console.log('event.target.value: ', event.target.value);
+      console.log('this.state.books: ', this.state.books);
+
   }
 
 
     render() {
 
-    let currentReads = this.state.books
-    let currentlyReadingShelf = currentReads.filter((book) => {return book.shelf === 'currentlyReading'})
+  let allBooks = this.state.books;
+  console.log('allBooks: ', allBooks)
+
+  let currentlyReadingShelf = allBooks.filter((book) => {return book.shelf === 'currentlyReading'})
 	console.log('Currently Reading Shelf: ', currentlyReadingShelf)
 
-	let readBooks = this.state.books
-	let readBookShelf = readBooks.filter((book) => {return book.shelf === 'read'})
+	let readBookShelf = allBooks.filter((book) => {return book.shelf === 'read'})
 	console.log('Read Shelf: ', readBookShelf)
 
-	let wantToRead = this.state.books
-	let wantToReadShelf = wantToRead.filter((book) => {return book.shelf === 'wantToRead'})
+	let wantToReadShelf = allBooks.filter((book) => {return book.shelf === 'wantToRead'})
 	console.log('Want To Read Shelf: ', wantToReadShelf);
 
 
@@ -76,9 +78,9 @@ class BooksApp extends React.Component {
             <div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>
-		<Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={componentDidUpdate.bind(this)} />
-		<Shelf shelfName='Want To Read' currentShelf={readBookShelf} updateShelf={componentDidUpdate.bind(this)} />
-		<Shelf shelfName='Read' currentShelf={wantToReadShelf} updateShelf={componentDidUpdate.bind(this)} />
+		<Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={this.componentDidUpdate.bind(this)} />
+		<Shelf shelfName='Read' currentShelf={readBookShelf} updateShelf={this.componentDidUpdate.bind(this)} />
+		<Shelf shelfName='Want To Read' currentShelf={wantToReadShelf} updateShelf={this.componentDidUpdate.bind(this)} />
           </div>
         )}
       </div>
