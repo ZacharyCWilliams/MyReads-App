@@ -19,7 +19,7 @@ class BooksApp extends React.Component {
 
   componentDidUpdate(event) {
       console.log('beginning of component: ', event)
-      let newListOfBooks = BooksAPI.update(this, event.target.value).then(BooksAPI.getAll())
+      let newListOfBooks = BooksAPI.update(event.target, event.target.value).then(BooksAPI.getAll())
       newListOfBooks.then((books) => {this.setState({books: newListOfBooks})}).then(this.forceUpdate())
       console.log('this: ', this);
       console.log('event.target.value: ', event.target.value);
