@@ -6,16 +6,11 @@ import Book from './Book'
 
 
 class BooksApp extends React.Component {
-constructor() {
-  super(props)
-  this.state = {
+
+  state = {
       showSearchPage: false,
       books: []
     }
-  this.componentDidUpdate.bind(this);
-  
-}
-
 
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
@@ -24,10 +19,9 @@ constructor() {
     }
 
   componentDidUpdate(event) {
-      console.log('beginning of component: ', event)
       let newListOfBooks = BooksAPI.update(event.target, event.target.value).then(BooksAPI.getAll())
       newListOfBooks.then((books) => {this.setState({books: newListOfBooks})}).then(this.forceUpdate())
-      console.log('this: ', this);
+      console.log('event target: ', event.target)
       console.log('event.target.value: ', event.target.value);
       console.log('this.state.books: ', this.state.books);
 
