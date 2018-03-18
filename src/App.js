@@ -2,14 +2,20 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Shelf from './Shelf'
+import Book from './Book'
 
 
 class BooksApp extends React.Component {
-
-  state = {
+constructor() {
+  super(props)
+  this.state = {
       showSearchPage: false,
       books: []
     }
+  this.componentDidUpdate.bind(this);
+  
+}
+
 
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
@@ -28,7 +34,7 @@ class BooksApp extends React.Component {
   }
 
 
-    render() {
+  render() {
 
   let allBooks = this.state.books;
   console.log('allBooks: ', allBooks)
@@ -41,10 +47,6 @@ class BooksApp extends React.Component {
 
 	let wantToReadShelf = allBooks.filter((book) => {return book.shelf === 'wantToRead'})
 	console.log('Want To Read Shelf: ', wantToReadShelf);
-
-
-
-
 
     return (
       <div className="app">
