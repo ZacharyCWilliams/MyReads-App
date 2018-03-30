@@ -32,7 +32,7 @@ body, .app {
 
 @media (min-width: 600px) {
   .bookshelf {
-    padding: 0 20px 40px;
+    padding: 0 20px 0;
   }
 }
 
@@ -67,7 +67,6 @@ body, .app {
 /* search page */
 
 .search-books-bar {
-  position: fixed;
   width: 100%;
   top: 0;
   left: 0;
@@ -77,7 +76,7 @@ body, .app {
 }
 .search-books-input-wrapper {
   flex: 1;
-  background: #e9e;
+  background: black;
 }
 .search-books-bar input {
   width: 100%;
@@ -191,7 +190,7 @@ body, .app {
   font-size: 25px;
   background: #332e2e;
   color: white;
-  
+
 }
 
 .select:hover {
@@ -220,4 +219,29 @@ padding-top: 30px;
  font-size: 32px;
  text-align: center;
   color: white;
+}
+
+.white-text {
+	color: white;
+}
+
+.book-list-item {
+  margin: 5px 20px 5px 20px;
+ 	display: flex;
+}
+
+.books-grid {
+	display: flex;
+  	margin: auto;
+  	width: 900px;
+}
+
+.book-title {
+	color: white;
+	margin-top: 15px;
+	margin-bottom: 6px;
+}
+
+.inputClassTest {
+  margin-bottom: 50px;
 }
