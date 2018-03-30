@@ -3,13 +3,17 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Shelf from './Shelf'
 import Book from './Book'
+import Search from './Search'
+import { Route } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 class BooksApp extends React.Component {
 
   state = {
       showSearchPage: false,
-      books: []
+      books: [],
+      searchingFor: []
     }
 
   componentDidMount(){
@@ -18,12 +22,20 @@ class BooksApp extends React.Component {
 	    });
     }
 
-  componentDidUpdate(event) {
-      let newListOfBooks = BooksAPI.update(event.target, event.target.value).then(BooksAPI.getAll())
-      newListOfBooks.then((books) => {this.setState({books: newListOfBooks})}).then(this.forceUpdate())
-      console.log('event.target.value: ', event.target.value)
+  componentDidUpdate(bookID, event) {
+    console.log('bookID: ', bookID)
+    console.log('event.target.value: ', event.target.value)
+    let newListOfBooks = BooksAPI.update(bookID, event.target.value)
+    console.log('newListOfBooks: ', newListOfBooks)
+    let booksbooksbooks = newListOfBooks.then(BooksAPI.getAll().then((books) => {this.setState({books: books})}))
+    console.log('booksbooksbooks: ', booksbooksbooks)
   }
 
+  searchFunctionality(event){
+    BooksAPI.search(event.target.value).then((results) => {
+      this.setState({ searchingFor: results });
+    });
+  }
 
   render() {
 
@@ -31,30 +43,50 @@ class BooksApp extends React.Component {
   console.log('allBooks: ', allBooks)
 
   let currentlyReadingShelf = allBooks.filter((book) => {return book.shelf === 'currentlyReading'})
-	console.log('Currently Reading Shelf: ', currentlyReadingShelf)
+	console.log('Currently Reading Shelf: ', currentlyReadingShelf);
 
 	let readBookShelf = allBooks.filter((book) => {return book.shelf === 'read'})
-	console.log('Read Shelf: ', readBookShelf)
+	console.log('Read Shelf: ', readBookShelf);
 
 	let wantToReadShelf = allBooks.filter((book) => {return book.shelf === 'wantToRead'})
 	console.log('Want To Read Shelf: ', wantToReadShelf);
 
+  let searchBooks = this.state.searchingFor
+
+
+  console.log('this.state.searchingFor: ', this.state.searchingFor)
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+              <Link to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
               <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
 
+                <input className='inputClassTest' type="text" placeholder="Search by title or author" onChange={(event) => this.searchFunctionality(event)}/>
+                { <ol className="books-grid">
+                    {searchBooks.map((book) => (
+                      <li className="book-list-item">
+                        <div className="book">
+                          <div className="book-top">
+                          <div className="book-cover" key={book.imageLinks.thumbnail} style={{width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                          <div className="book-shelf-changer">
+                            <select id="select-shelf" key={book.id} onChange={(event) => {this.componentDidUpdate(book, event)}}>
+                            <option value="none" disabled>Move to...</option>
+                            <option value="currentlyReading">Currently Reading</option>
+                            <option value="wantToRead">Want to Read</option>
+                            <option value="read">Read</option>
+                            <option value="none">None</option>
+                            </select>
+                          </div>
+                          </div>
+                          <div className="book-title">{book.title}</div>
+                          <div className="book-authors">{book.authors}</div>
+                        </div>
+                      </li>
+                    ))}
+                    </ol>
+                    }
               </div>
             </div>
             <div className="search-books-results">
@@ -69,7 +101,7 @@ class BooksApp extends React.Component {
             <div className="list-books-content">
             </div>
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <Link to='/search' onClick={() => this.setState({ showSearchPage: true })}>Add a book</Link>
             </div>
 		<Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={this.componentDidUpdate.bind(this)} />
 		<Shelf shelfName='Read' currentShelf={readBookShelf} updateShelf={this.componentDidUpdate.bind(this)} />
