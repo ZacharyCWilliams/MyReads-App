@@ -8,7 +8,6 @@ class Book extends Component {
   render() {
 
     const bookIDProp = this.props.book.id
-    console.log('bookIDProp: ', bookIDProp)
 
    return (
     <li className="book-list-item">
@@ -16,7 +15,7 @@ class Book extends Component {
         <div className="book-top">
         <div className="book-cover" key={this.props.book.imageLinks.thumbnail} style={{width: 128, height: 193, backgroundImage: `url(${this.props.book.imageLinks.thumbnail})`}}></div>
         <div className="book-shelf-changer">
-          <select id="select-shelf" key={this.props.book.id} onChange={(event) => {this.props.updateShelf(event)}}>
+          <select id="select-shelf" key={this.props.book.id} onChange={(event) => {this.props.updateShelf(this.props.book, event)}}>
           <option value="none" disabled>Move to...</option>
           <option value="currentlyReading">Currently Reading</option>
           <option value="wantToRead">Want to Read</option>
