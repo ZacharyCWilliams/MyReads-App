@@ -60,7 +60,7 @@ class BooksApp extends React.Component {
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
-              <Link to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
+              <Link exact to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
               <div className="search-books-input-wrapper">
 
                 <input className='inputClassTest' type="text" placeholder="Search by title or author" onChange={(event) => this.searchFunctionality(event)}/>
