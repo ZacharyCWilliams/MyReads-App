@@ -66,11 +66,13 @@ class BooksApp extends React.Component {
                 { <ol className="books-grid">
                     {searchBooks.map((book) => (
                       <li className="book-list-item">
+                        {book.shelf = 'none'}
+                        {console.log('book.shelf: ', book.shelf)}
                         <div className="book">
                           <div className="book-top">
                           <div className="book-cover" key={book.imageLinks.thumbnail} style={{width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                           <div className="book-shelf-changer">
-                            <select id="select-shelf" key={book.id} onChange={(event) => {this.componentDidUpdate(book, event)}}>
+                            <select id="select-shelf" value={book.shelf} key={book.id} onChange={(event) => {this.componentDidUpdate(book, event)}}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
