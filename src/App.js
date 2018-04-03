@@ -3,6 +3,7 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Shelf from './Shelf'
 import Book from './Book'
+import Search from './Search'
 import { Route } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 
@@ -59,32 +60,13 @@ class BooksApp extends React.Component {
         {this.state.showSearchPage ? (
           <div className="search-books">
             <div className="search-books-bar">
-              <Link exact to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
+              <Link to='/' className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
               <div className="search-books-input-wrapper">
 
                 <input className='inputClassTest' type="text" placeholder="Search by title or author" onChange={(event) => this.searchFunctionality(event)}/>
                 { <ol className="books-grid">
                     {searchBooks.map((book) => (
-                      <li className="book-list-item">
-                        {book.shelf = 'none'}
-                        {console.log('book.shelf: ', book.shelf)}
-                        <div className="book">
-                          <div className="book-top">
-                          <div className="book-cover" key={book.imageLinks.thumbnail} style={{width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
-                          <div className="book-shelf-changer">
-                            <select id="select-shelf" value={book.shelf} key={book.id} onChange={(event) => {this.componentDidUpdate(book, event)}}>
-                            <option value="none" disabled>Move to...</option>
-                            <option value="currentlyReading">Currently Reading</option>
-                            <option value="wantToRead">Want to Read</option>
-                            <option value="read">Read</option>
-                            <option value="none">None</option>
-                            </select>
-                          </div>
-                          </div>
-                          <div className="book-title">{book.title}</div>
-                          <div className="book-authors">{book.authors}</div>
-                        </div>
-                      </li>
+                      <Search book={book} updateShelf={this.componentDidUpdate.bind(this)} />
                     ))}
                     </ol>
                     }
