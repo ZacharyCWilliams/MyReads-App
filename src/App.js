@@ -76,11 +76,26 @@ class BooksApp extends React.Component {
 
   console.log('this.state.searchingFor: ', this.state.searchingFor)
     return (
-      <div className="app">
-      {this.state.showSearchPage ? (
+    <div className="app">
+      <Route exact path='/' render={() => (
+        <div className="list-books">
+          <div className="list-books-title">
+            <h1>MyReads</h1>
+          </div>
+          <div className="list-books-content">
+          </div>
+          <div className="open-search">
+            <Link to='/search'>Add a book</Link>
+          </div>
+          <Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={this.componentDidUpdate.bind(this)} />
+          <Shelf shelfName='Read' currentShelf={readBookShelf} updateShelf={this.componentDidUpdate.bind(this)} />
+          <Shelf shelfName='Want To Read' currentShelf={wantToReadShelf} updateShelf={this.componentDidUpdate.bind(this)} />
+        </div>
+      )} />
+      <Route path='/search' render={() => (
         <div className="search-books">
           <div className="search-books-bar">
-            <Link to='/' className="close-search"  onClick={() => this.setState({ showSearchPage: false })}>Close</Link>
+            <Link to='/' className="close-search">Close</Link>
             <div className="search-books-input-wrapper">
               <input className='inputClassTest' type="text" placeholder="Search by title or author" onChange={(event) => this.searchFunctionality(event)}/>
 
@@ -96,22 +111,8 @@ class BooksApp extends React.Component {
             <ol className="books-grid"></ol>
           </div>
         </div>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-          </div>
-          <div className="open-search">
-            <Link to='/search' onClick={() => this.setState({ showSearchPage: true })}>Add a book</Link>
-          </div>
-          <Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={this.componentDidUpdate.bind(this)} />
-          <Shelf shelfName='Read' currentShelf={readBookShelf} updateShelf={this.componentDidUpdate.bind(this)} />
-          <Shelf shelfName='Want To Read' currentShelf={wantToReadShelf} updateShelf={this.componentDidUpdate.bind(this)} />
-        </div>
-      )}
-      </div>
+      )}/>
+    </div>
     )
   }
 }
