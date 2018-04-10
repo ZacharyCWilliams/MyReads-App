@@ -47,8 +47,7 @@ class BooksApp extends React.Component {
               } else if (!result.shelf) {
                 result.shelf = 'none';
               } if (result.imageLinks === undefined) {
-                result.imageLinks = 'https://dummyimage.com/128x193/292929/e3e3e3&text=No';
-                result.shelf = 'none';
+                result.imageLinks = `url(https://dummyimage.com/128x193/292929/e3e3e3&text=No)`;
               }
             });
           });
