@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom'
 class BooksApp extends React.Component {
 
   state = {
-      showSearchPage: false,
       books: [],
       searchingFor: []
     }
@@ -22,7 +21,7 @@ class BooksApp extends React.Component {
 	    });
     }
 
-  componentDidUpdate(bookID, event) {
+  updateBookNow(bookID, event) {
     console.log('bookID: ', bookID)
     console.log('event.target.value: ', event.target.value)
     let newListOfBooks = BooksAPI.update(bookID, event.target.value)
@@ -30,6 +29,7 @@ class BooksApp extends React.Component {
     let booksbooksbooks = newListOfBooks.then(BooksAPI.getAll().then((books) => {this.setState({books: books})}))
     console.log('booksbooksbooks: ', booksbooksbooks)
   }
+  //componentDidUpdate
 
   searchFunctionality(event){
     if (event.target.value !== '') {
@@ -43,7 +43,12 @@ class BooksApp extends React.Component {
             let filteredResults = this.state.books.forEach(book => {
               if (book.id === result.id) {
                 result.shelf = book.shelf;
-                console.log(book.title + 's id matched results id. result shelf = ', result.shelf)
+                console.log(book.title + 's id matched results id. result shelf = ', result.shelf);
+              } else if (!result.shelf) {
+                result.shelf = 'none';
+              } if (result.imageLinks === undefined) {
+                result.imageLinks = 'https://dummyimage.com/128x193/292929/e3e3e3&text=No';
+                result.shelf = 'none';
               }
             });
           });
@@ -56,6 +61,7 @@ class BooksApp extends React.Component {
   }
 
   //need to make book reflect shelf OR book.shelf = none
+
 
   render() {
 
@@ -87,9 +93,9 @@ class BooksApp extends React.Component {
           <div className="open-search">
             <Link to='/search'>Add a book</Link>
           </div>
-          <Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={this.componentDidUpdate.bind(this)} />
-          <Shelf shelfName='Read' currentShelf={readBookShelf} updateShelf={this.componentDidUpdate.bind(this)} />
-          <Shelf shelfName='Want To Read' currentShelf={wantToReadShelf} updateShelf={this.componentDidUpdate.bind(this)} />
+          <Shelf shelfName='Currently Reading' currentShelf={currentlyReadingShelf} updateShelf={this.updateBookNow.bind(this)} />
+          <Shelf shelfName='Read' currentShelf={readBookShelf} updateShelf={this.updateBookNow.bind(this)} />
+          <Shelf shelfName='Want To Read' currentShelf={wantToReadShelf} updateShelf={this.updateBookNow.bind(this)} />
         </div>
       )} />
       <Route path='/search' render={() => (
@@ -101,7 +107,7 @@ class BooksApp extends React.Component {
 
               { <ol className="books-grid">
                   {searchBooks.map((book) => (
-                    <Search book={book} updateShelf={this.componentDidUpdate.bind(this)} />
+                    <Search book={book} updateShelf={this.updateBookNow.bind(this)} />
                   ))}
                   </ol>
                   }
