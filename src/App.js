@@ -35,19 +35,19 @@ class BooksApp extends React.Component {
     if (event.target.value !== '') {
       BooksAPI.search(event.target.value).then((results) => {
         if (results.error) {
-          console.log('there was an error');
           this.setState({ searchingFor: [] });
         }
         else if (results) {
           results.map(result => {
+            if (result.shelf === undefined) {
+              result.shelf = 'none';
+            }
+            if (result.imageLinks === undefined) {
+              result.imageLinks = `url(https://dummyimage.com/128x193/292929/e3e3e3&text=No)`;
+            }
             let filteredResults = this.state.books.forEach(book => {
               if (book.id === result.id) {
                 result.shelf = book.shelf;
-                console.log(book.title + 's id matched results id. result shelf = ', result.shelf);
-              } else if (!result.shelf) {
-                result.shelf = 'none';
-              } if (result.imageLinks === undefined) {
-                result.imageLinks = `url(https://dummyimage.com/128x193/292929/e3e3e3&text=No)`;
               }
             });
           });
@@ -106,7 +106,7 @@ class BooksApp extends React.Component {
 
               { <ol className="books-grid">
                   {searchBooks.map((book) => (
-                    <Search book={book} updateShelf={this.updateBookNow.bind(this)} />
+                    <Book key={book.id} book={book} updateShelf={this.updateBookNow.bind(this)} />
                   ))}
                   </ol>
                   }
