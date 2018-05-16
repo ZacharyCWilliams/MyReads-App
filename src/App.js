@@ -21,12 +21,8 @@ class BooksApp extends React.Component {
     }
 
   updateBookNow(bookID, event) {
-    console.log('bookID: ', bookID)
-    console.log('event.target.value: ', event.target.value)
     let newListOfBooks = BooksAPI.update(bookID, event.target.value)
-    console.log('newListOfBooks: ', newListOfBooks)
     let booksbooksbooks = newListOfBooks.then(BooksAPI.getAll().then((books) => {this.setState({books: books})}))
-    console.log('booksbooksbooks: ', booksbooksbooks)
   }
   //componentDidUpdate
 
@@ -60,25 +56,13 @@ class BooksApp extends React.Component {
 
   //need to make book reflect shelf OR book.shelf = none
 
-
   render() {
-
-  let allBooks = this.state.books;
-  console.log('allBooks: ', allBooks)
-
-  let currentlyReadingShelf = allBooks.filter((book) => {return book.shelf === 'currentlyReading'})
-	console.log('Currently Reading Shelf: ', currentlyReadingShelf);
-
+  	let allBooks = this.state.books;
+  	let currentlyReadingShelf = allBooks.filter((book) => {return book.shelf === 'currentlyReading'})
 	let readBookShelf = allBooks.filter((book) => {return book.shelf === 'read'})
-	console.log('Read Shelf: ', readBookShelf);
-
 	let wantToReadShelf = allBooks.filter((book) => {return book.shelf === 'wantToRead'})
-	console.log('Want To Read Shelf: ', wantToReadShelf);
-
-  let searchBooks = this.state.searchingFor
-
-
-  console.log('this.state.searchingFor: ', this.state.searchingFor)
+  	let searchBooks = this.state.searchingFor
+  
     return (
     <div className="app">
       <Route exact path='/' render={() => (
